@@ -1,0 +1,99 @@
+/* DASHBOARD.CSS - Modern Netflix-style dashboard */
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #141414;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+header.logged-in-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #000;
+  border-bottom: 1px solid #222;
+}
+
+.logo {
+  font-size: 1.8rem;
+  color: #e50914;
+  font-weight: bold;
+}
+
+.icon-nav a {
+  margin-left: 20px;
+  color: #ccc;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.icon-nav a:hover {
+  color: #fff;
+}
+
+.dashboard-main {
+  padding: 2rem;
+  text-align: center;
+  animation: fadeIn 1s ease-in;
+}
+
+#welcomeMsg {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.dashboard-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.section-box {
+  background: #1c1c1c;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #2c2c2c;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section-box:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 10px rgba(229, 9, 20, 0.6);
+}
+
+.section-box h2 {
+  color: #e50914;
+}
+
+.section-box a {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #fff;
+  background-color: #e50914;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.section-box a:hover {
+  background-color: #b20710;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  color: #777;
+  background-color: #000;
+  border-top: 1px solid #222;
+}
+
+/* Fade In Keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
