@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduMarkt - Music Explorer</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2em;
+    }
+
+    #searchContainer {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    #searchInput {
+      width: 60%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    #searchButton {
+      padding: 12px 20px;
+      font-size: 16px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 6px;
+      background-color: #00b894;
+      color: white;
+      cursor: pointer;
+    }
+
+    #videoContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .videoCard {
+      background-color: #1f1f1f;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .videoCard iframe {
+      width: 100%;
+      height: 200px;
+      border: none;
+    }
+
+    .videoInfo {
+      padding: 15px;
+    }
+
+    .videoInfo h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      color: #00cec9;
+    }
+
+    .videoInfo p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .watermark {
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      color: #ffffff;
+      font-size: 12px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+
+    .download-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 12px;
+      background-color: #0984e3;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .download-btn:hover {
+      background-color: #74b9ff;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎵 EduMarkt Music Explorer</h1>
+
+  <div id="searchContainer">
+    <input type="text" id="searchInput" placeholder="Search for music videos..." />
+    <button id="searchButton">Search</button>
+  </div>
+
+  <div id="videoContainer"></div>
+
+  <script>
+    const apiKey = "AIzaSyDuPVYVkpvmAw3q8oMn0ymW2J2HhgD05XY";
+    const videoContainer = document.getElementById("videoContainer");
+    const searchInput = document.getElementById("searchInput");
+    const searchButton = document.getElementById("searchButton");
+
+    const randomMusicQueries = [
+      "top music 2024", "afrobeats", "EDM", "hip hop", "trap music",
+      "rnb mix", "latest songs", "pop hits", "Zambian music", "gospel vibes",
+      "dancehall party", "Latin music", "DJ mixes"
+    ];
+
+    function getRandomQuery() {
+      return randomMusicQueries[Math.floor(Math.random() * randomMusicQueries.length)];
+    }
+
+    async function fetchVideos(query = getRandomQuery()) {
+      videoContainer.innerHTML = "<p>Loading music videos...</p>";
+
+      try {
+        const res = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${apiKey}&part=snippet&type=video&maxResults=12&q=${encodeURIComponent(query)}&order=date&videoCategoryId=10`);
+        const data = await res.json();
+
+        if (!data.items || data.items.length === 0) {
+          videoContainer.innerHTML = "<p>No music videos found. Try another keyword.</p>";
+          return;
+        }
+
+        videoContainer.innerHTML = "";
+
+        data.items.forEach(item => {
+          const videoId = item.id.videoId;
+          const title = item.snippet.title;
+          const channel = item.snippet.channelTitle;
+          const publishDate = new Date(item.snippet.publishedAt).toLocaleDateString();
+
+          const videoCard = document.createElement("div");
+          videoCard.className = "videoCard";
+          videoCard.innerHTML = `
+            <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+            <div class="watermark">EduMarkt</div>
+            <div class="videoInfo">
+              <h3>${title}</h3>
+              <p>🎤 ${channel}</p>
+              <p>📅 ${publishDate}</p>
+              <a class="download-btn" href="https://www.y2mate.com/youtube/${videoId}" target="_blank">Download</a>
+            </div>
+          `;
+          videoContainer.appendChild(videoCard);
+        });
+      } catch (err) {
+        videoContainer.innerHTML = "<p>Error loading videos. Please check your API key or connection.</p>";
+      }
+    }
+
+    searchButton.addEventListener("click", () => {
+      const keyword = searchInput.value.trim();
+      if (keyword) fetchVideos(keyword);
+    });
+
+    window.addEventListener("load", () => {
+      fetchVideos(); // Load music on page load
+    });
+  </script>
+
+</body>
+</html>
